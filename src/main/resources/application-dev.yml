@@ -1,0 +1,6 @@
+spring:
+  profiles: dev
+  server:
+    port: 84
+  feedback-service:
+    url: http://localhost:84
