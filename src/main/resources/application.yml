@@ -29,13 +29,17 @@ address:
   url:
     service: http://localhost:86/api/address
 
+restaurant:
+    url:
+      service: http://localhost:85/api/restaurant
+
 
 # Server Configuration
 server:
   error:
     whitelabel:
       enabled: false
-  port: 84
+  port: 8084
 
 
 

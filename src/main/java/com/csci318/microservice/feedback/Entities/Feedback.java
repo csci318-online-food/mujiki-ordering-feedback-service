@@ -1,10 +1,12 @@
 package com.csci318.microservice.feedback.Entities;
 
+import com.csci318.microservice.feedback.Entities.Event.FeedbackCreatedEvent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -15,7 +17,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "feedbacks")
-public class Feedback {
+public class Feedback extends AbstractAggregateRoot<Feedback> {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -25,9 +27,6 @@ public class Feedback {
 
     @Column(name = "restaurant_id")
     private UUID restaurantId;
-
-    @Column(name = "item_id", nullable = true)
-    private UUID itemId;
 
     @Column(name = "rating")
     private int rating;
@@ -46,4 +45,10 @@ public class Feedback {
 
     @Column(name = "create_by")
     private String createBy;
+
+    public Feedback registerFeedbackCreatedEvent() {
+        FeedbackCreatedEvent event = new FeedbackCreatedEvent(this.id, this.restaurantId, this.rating);
+        registerEvent(event);
+        return this;
+    }
 }
