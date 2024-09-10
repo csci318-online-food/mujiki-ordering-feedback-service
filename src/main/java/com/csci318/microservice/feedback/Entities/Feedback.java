@@ -1,6 +1,7 @@
 package com.csci318.microservice.feedback.Entities;
 
 import com.csci318.microservice.feedback.Entities.Event.FeedbackCreatedEvent;
+import com.csci318.microservice.feedback.Services.Impl.FeedbackServiceImpl;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.sql.Timestamp;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +20,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "feedbacks")
 public class Feedback extends AbstractAggregateRoot<Feedback> {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -46,9 +50,20 @@ public class Feedback extends AbstractAggregateRoot<Feedback> {
     @Column(name = "create_by")
     private String createBy;
 
-    public Feedback registerFeedbackCreatedEvent() {
-        FeedbackCreatedEvent event = new FeedbackCreatedEvent(this.id, this.restaurantId, this.rating);
-        registerEvent(event);
-        return this;
+    public FeedbackCreatedEvent registerFeedbackCreatedEvent(int averageRating) {
+        try {
+            FeedbackCreatedEvent event = new FeedbackCreatedEvent();
+            event.setEventName("User feedback created");
+            event.setUserId(this.userId);
+            event.setRestaurantId(this.restaurantId);
+            event.setRating(this.rating);
+            event.setAverageRating(averageRating);
+            registerEvent(event);
+            Logger.getLogger(FeedbackServiceImpl.class.getName()).info("Feedback created event registered");
+            return event;
+        } catch (Exception e) {
+            Logger.getLogger(FeedbackServiceImpl.class.getName()).warning("Failed to register event");
+        }
+        return null;
     }
 }

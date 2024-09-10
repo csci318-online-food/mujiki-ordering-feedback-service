@@ -13,6 +13,7 @@ import java.util.UUID;
 @Setter
 public class FeedbackDTOResponse {
     private UUID id;
+    private UUID userId;
     private UUID restaurantId;
     private Integer rating;
     private String comments;

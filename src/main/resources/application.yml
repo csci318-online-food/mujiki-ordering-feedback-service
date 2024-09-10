@@ -27,11 +27,11 @@ api:
 
 address:
   url:
-    service: http://localhost:86/api/address
+    service: http://localhost:8086/api/address
 
 restaurant:
     url:
-      service: http://localhost:85/api/restaurant
+      service: http://localhost:8082/api/restaurant
 
 
 # Server Configuration
@@ -41,5 +41,12 @@ server:
       enabled: false
   port: 8084
 
+logging:
+  level:
+    org:
+      springframework:
+        transaction: DEBUG
+#          event: DEBUG
+        context: DEBUG
 
 
