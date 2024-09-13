@@ -1,7 +1,6 @@
 package com.csci318.microservice.feedback.Entities;
 
 import com.csci318.microservice.feedback.Entities.Event.FeedbackCreatedEvent;
-import com.csci318.microservice.feedback.Services.Impl.FeedbackServiceImpl;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,20 +49,5 @@ public class Feedback extends AbstractAggregateRoot<Feedback> {
     @Column(name = "create_by")
     private String createBy;
 
-    public FeedbackCreatedEvent registerFeedbackCreatedEvent(int averageRating) {
-        try {
-            FeedbackCreatedEvent event = new FeedbackCreatedEvent();
-            event.setEventName("User feedback created");
-            event.setUserId(this.userId);
-            event.setRestaurantId(this.restaurantId);
-            event.setRating(this.rating);
-            event.setAverageRating(averageRating);
-            registerEvent(event);
-            Logger.getLogger(FeedbackServiceImpl.class.getName()).info("Feedback created event registered");
-            return event;
-        } catch (Exception e) {
-            Logger.getLogger(FeedbackServiceImpl.class.getName()).warning("Failed to register event");
-        }
-        return null;
-    }
+
 }

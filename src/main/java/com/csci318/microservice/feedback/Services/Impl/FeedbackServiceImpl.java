@@ -5,16 +5,16 @@ import com.csci318.microservice.feedback.DTOs.FeedbackDTOResponse;
 import com.csci318.microservice.feedback.Entities.Event.FeedbackCreatedEvent;
 import com.csci318.microservice.feedback.Entities.Feedback;
 import com.csci318.microservice.feedback.Mappers.FeedbackMapper;
+import com.csci318.microservice.feedback.Repositories.FeedbackEventRepository;
 import com.csci318.microservice.feedback.Repositories.FeedbackRepository;
 import com.csci318.microservice.feedback.Services.FeedbackService;
 import jakarta.transaction.Transactional;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -28,17 +28,17 @@ public class FeedbackServiceImpl implements FeedbackService {
     private String RESTAURANT_URL;
     private final RestTemplate restTemplate;
     private final FeedbackRepository feedbackRepository;
+    private final FeedbackEventRepository feedbackEventRepository;
     private final FeedbackMapper feedbackMapper;
-    private final ApplicationEventPublisher eventPublisher;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
 
-
-
-    public FeedbackServiceImpl(RestTemplate restTemplate, FeedbackRepository feedbackRepository, FeedbackMapper feedbackMapper, ApplicationEventPublisher eventPublisher) {
+    public FeedbackServiceImpl(RestTemplate restTemplate, FeedbackRepository feedbackRepository, FeedbackEventRepository feedbackEventRepository, FeedbackMapper feedbackMapper) {
         this.restTemplate = restTemplate;
         this.feedbackRepository = feedbackRepository;
+        this.feedbackEventRepository = feedbackEventRepository;
         this.feedbackMapper = feedbackMapper;
-        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -63,12 +63,22 @@ public class FeedbackServiceImpl implements FeedbackService {
         String url = RESTAURANT_URL + "/" + feedbackDTORequest.getRestaurantId() + "/rating/" + averageRating;
         this.restTemplate.put(url, null);
 
-        // Register event with average rating
-        FeedbackCreatedEvent feedbackWithEvent = feedback.registerFeedbackCreatedEvent(averageRating);
+        FeedbackCreatedEvent event = new FeedbackCreatedEvent();
+        event.setEventName("User feedback created");
+        event.setUserId(feedback.getUserId());
+        event.setRestaurantId(feedback.getRestaurantId());
+        event.setRating(feedback.getRating());
+        event.setAverageRating(averageRating);
+        eventPublisher.publishEvent(event);
+        if (feedbackEventRepository.count() >0) {
+            Logger.getLogger(FeedbackServiceImpl.class.getName()).info("Feedback created event registered");
+        }
+
 
         // Publish the event
-        this.eventPublisher.publishEvent(feedbackWithEvent);
         FeedbackDTOResponse feedbackDTOResponse = this.feedbackMapper.toDtos(feedback);
         return feedbackDTOResponse;
     }
+
+
 }

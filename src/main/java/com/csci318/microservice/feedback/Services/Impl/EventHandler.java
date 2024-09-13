@@ -2,6 +2,7 @@ package com.csci318.microservice.feedback.Services.Impl;
 
 import com.csci318.microservice.feedback.Entities.Event.FeedbackCreatedEvent;
 import com.csci318.microservice.feedback.Repositories.FeedbackEventRepository;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -19,11 +20,16 @@ public class EventHandler {
         this.feedbackEventRepository = feedbackEventRepository;
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+   @EventListener
     public void handleFeedbackCreatedEvent(FeedbackCreatedEvent feedbackCreatedEvent) {
         try {
+            logger.info("Saving FeedbackCreatedEvent: " + feedbackCreatedEvent);
             feedbackEventRepository.save(feedbackCreatedEvent);
             logger.info("Feedback created event saved to database");
+
+            // Retrieve and log all events to verify
+            var allEvents = feedbackEventRepository.findAll();
+            logger.info("All FeedbackCreatedEvents: " + allEvents);
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error saving FeedbackCreatedEvent: " + e.getMessage(), e);
         }

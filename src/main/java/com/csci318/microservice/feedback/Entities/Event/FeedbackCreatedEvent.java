@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "feedback-event")
+@Table(name = "feedback_events")
 public class FeedbackCreatedEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -23,7 +23,4 @@ public class FeedbackCreatedEvent {
     private UUID restaurantId;
     private int rating;
     private double averageRating;
-
-
-
 }
