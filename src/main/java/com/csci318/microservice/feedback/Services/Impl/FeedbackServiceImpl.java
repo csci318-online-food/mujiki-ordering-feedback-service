@@ -59,9 +59,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             totalRating += f.getRating();
         }
 
-        int averageRating = totalRating / feedbacks.size();
-        String url = RESTAURANT_URL + "/" + feedbackDTORequest.getRestaurantId() + "/rating/" + averageRating;
-        this.restTemplate.put(url, null);
+        double averageRating = (double) totalRating / feedbacks.size();
 
         FeedbackCreatedEvent event = new FeedbackCreatedEvent();
         event.setEventName("User feedback created");
@@ -70,6 +68,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         event.setRating(feedback.getRating());
         event.setAverageRating(averageRating);
         eventPublisher.publishEvent(event);
+
         if (feedbackEventRepository.count() >0) {
             Logger.getLogger(FeedbackServiceImpl.class.getName()).info("Feedback created event registered");
         }

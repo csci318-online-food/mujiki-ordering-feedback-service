@@ -1,6 +1,6 @@
 package com.csci318.microservice.feedback.Entities.Relation;
 
-import com.csci318.microservice.feedback.Constants.HttpStatus.CuisineType;
+import com.csci318.microservice.feedback.Constants.CuisineType;
 
 import java.time.LocalTime;
 

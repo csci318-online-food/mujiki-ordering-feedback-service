@@ -1,4 +1,4 @@
-package com.csci318.microservice.feedback.Constants.HttpStatus;
+package com.csci318.microservice.feedback.Constants;
 
 public enum CuisineType {
     CHINESE,
