@@ -1,8 +1,10 @@
-package com.csci318.microservice.feedback.Mappers;
+package com.csci318.microservice.feedback.Mappers.Impl;
 
 import com.csci318.microservice.feedback.DTOs.FeedbackDTORequest;
 import com.csci318.microservice.feedback.DTOs.FeedbackDTOResponse;
-import com.csci318.microservice.feedback.Entities.Feedback;
+import com.csci318.microservice.feedback.Domain.Entities.Feedback;
+import com.csci318.microservice.feedback.Mappers.Mapper;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;

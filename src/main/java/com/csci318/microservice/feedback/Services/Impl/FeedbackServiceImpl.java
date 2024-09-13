@@ -2,14 +2,13 @@ package com.csci318.microservice.feedback.Services.Impl;
 
 import com.csci318.microservice.feedback.DTOs.FeedbackDTORequest;
 import com.csci318.microservice.feedback.DTOs.FeedbackDTOResponse;
-import com.csci318.microservice.feedback.Entities.Event.FeedbackCreatedEvent;
-import com.csci318.microservice.feedback.Entities.Feedback;
-import com.csci318.microservice.feedback.Mappers.FeedbackMapper;
+import com.csci318.microservice.feedback.Domain.Entities.Feedback;
+import com.csci318.microservice.feedback.Domain.Events.FeedbackCreatedEvent;
+import com.csci318.microservice.feedback.Mappers.Impl.FeedbackMapper;
 import com.csci318.microservice.feedback.Repositories.FeedbackEventRepository;
 import com.csci318.microservice.feedback.Repositories.FeedbackRepository;
 import com.csci318.microservice.feedback.Services.FeedbackService;
 import jakarta.transaction.Transactional;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

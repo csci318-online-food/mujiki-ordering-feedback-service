@@ -1,6 +1,6 @@
-package com.csci318.microservice.feedback.Entities;
+package com.csci318.microservice.feedback.Domain.Entities;
 
-import com.csci318.microservice.feedback.Entities.Event.FeedbackCreatedEvent;
+import com.csci318.microservice.feedback.Domain.Events.FeedbackCreatedEvent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

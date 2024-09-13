@@ -1,4 +1,4 @@
-package com.csci318.microservice.feedback.Entities.Event;
+package com.csci318.microservice.feedback.Domain.Events;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

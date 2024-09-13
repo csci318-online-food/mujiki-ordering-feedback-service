@@ -1,7 +1,7 @@
 package com.csci318.microservice.feedback.Services.Impl;
 
-import com.csci318.microservice.feedback.Entities.Event.FeedbackCreatedEvent;
-import com.csci318.microservice.feedback.Entities.Relation.Restaurant;
+import com.csci318.microservice.feedback.Domain.Events.FeedbackCreatedEvent;
+import com.csci318.microservice.feedback.Domain.Relations.Restaurant;
 import com.csci318.microservice.feedback.Repositories.FeedbackEventRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
@@ -35,11 +35,11 @@ public class EventHandler {
             logger.info("Saving FeedbackCreatedEvent: " + event);
 
             // STEP 2: retrieve the restaurant from the restaurant service
-//            Restaurant restaurant = restTemplate.getForObject(RESTAURANT_URL + "/findById/"+ event.getRestaurantId(), Restaurant.class);
-//            if (restaurant == null) {
-//                throw new Exception("Restaurant not found for id: " + event.getRestaurantId());
-//            }
-//
+            Restaurant restaurant = restTemplate.getForObject(RESTAURANT_URL + "/findById/"+ event.getRestaurantId(), Restaurant.class);
+            if (restaurant == null) {
+                throw new Exception("Restaurant not found for id: " + event.getRestaurantId());
+            }
+
             // STEP 3: update the restaurant rating from the event rating
             String url = RESTAURANT_URL + "/" + event.getRestaurantId() + "/rating";
             this.restTemplate.put(url, event);

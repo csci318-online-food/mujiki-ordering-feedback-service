@@ -1,8 +1,9 @@
 package com.csci318.microservice.feedback.Repositories;
 
-import com.csci318.microservice.feedback.Entities.Event.FeedbackCreatedEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.csci318.microservice.feedback.Domain.Events.FeedbackCreatedEvent;
 
 import java.util.UUID;
 
