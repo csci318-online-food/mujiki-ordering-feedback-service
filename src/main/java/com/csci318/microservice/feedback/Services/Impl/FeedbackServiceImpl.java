@@ -49,6 +49,9 @@ public class FeedbackServiceImpl implements FeedbackService {
         feedback.setComments(feedbackDTORequest.getComments());
         feedback.setUserId(feedbackDTORequest.getUserId());
         feedback.setRestaurantId(feedbackDTORequest.getRestaurantId());
+        if (feedbackDTORequest.getRating() < 1 || feedbackDTORequest.getRating() > 5) {
+            throw new RuntimeException("Rating must be between 1 and 5");
+        }
         this.feedbackRepository.save(feedback);
 
         // Update the average rating of the restaurant
