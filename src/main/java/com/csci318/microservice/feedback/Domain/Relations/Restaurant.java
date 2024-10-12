@@ -8,15 +8,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Restaurant {
-    private String id;
+    private UUID id;
     private String name;
-    private String phone;
+    // Nor referenced in this service.
+    // private PhoneNumber phone;
     private String email;
     private String password;
     private CuisineType cuisine;
