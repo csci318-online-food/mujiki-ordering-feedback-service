@@ -52,11 +52,6 @@ public class EventHandler {
 
             // STEP 3: push the event to relevant channels
             streamBridge.send("mujikiFeedbackEventChannel", event);
-
-            // STEP 4: update the restaurant rating from the event rating
-            String url = RESTAURANT_URL + "/" + event.getRestaurantId() + "/rating";
-            this.restTemplate.put(url, event);
-            log.info("Updating restaurant rating: " + url);
         } catch (Exception e) {
             log.error("Error saving FeedbackCreatedEvent: ", e);
         }
