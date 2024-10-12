@@ -3,22 +3,23 @@ package com.csci318.microservice.feedback.Services.Impl;
 import com.csci318.microservice.feedback.Domain.Events.FeedbackCreatedEvent;
 import com.csci318.microservice.feedback.Domain.Relations.Restaurant;
 import com.csci318.microservice.feedback.Repositories.FeedbackEventRepository;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 @Service
+@Slf4j
 public class EventHandler {
 
     private final FeedbackEventRepository feedbackEventRepository;
     private final RestTemplate restTemplate;
+
     @Value("${restaurant.url.service}")
     private String RESTAURANT_URL;
-    private final Logger logger = Logger.getLogger(EventHandler.class.getName());
 
     public EventHandler(FeedbackEventRepository feedbackEventRepository, RestTemplate restTemplate) {
         this.feedbackEventRepository = feedbackEventRepository;
@@ -30,7 +31,7 @@ public class EventHandler {
         try {
             // STEP 1: save the event to the database
             feedbackEventRepository.save(event);
-            logger.info("Saving FeedbackCreatedEvent: " + event);
+            log.info("Saving FeedbackCreatedEvent: " + event);
 
             // STEP 2: retrieve the restaurant from the restaurant service
             Restaurant restaurant = restTemplate.getForObject(RESTAURANT_URL + "/findById/"+ event.getRestaurantId(), Restaurant.class);
@@ -41,11 +42,10 @@ public class EventHandler {
             // STEP 3: update the restaurant rating from the event rating
             String url = RESTAURANT_URL + "/" + event.getRestaurantId() + "/rating";
             this.restTemplate.put(url, event);
-            logger.info("Updating restaurant rating: " + url);
+            log.info("Updating restaurant rating: " + url);
 
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error saving FeedbackCreatedEvent: " + e.getMessage(), e);
+            log.error("Error saving FeedbackCreatedEvent: ", e);
         }
     }
-
 }
