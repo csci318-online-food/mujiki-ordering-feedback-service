@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -25,16 +24,14 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Value("${restaurant.url.service}")
     private String RESTAURANT_URL;
-    private final RestTemplate restTemplate;
     private final FeedbackRepository feedbackRepository;
     private final FeedbackEventRepository feedbackEventRepository;
     private final FeedbackMapper feedbackMapper;
+
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-
-    public FeedbackServiceImpl(RestTemplate restTemplate, FeedbackRepository feedbackRepository, FeedbackEventRepository feedbackEventRepository, FeedbackMapper feedbackMapper) {
-        this.restTemplate = restTemplate;
+    public FeedbackServiceImpl(FeedbackRepository feedbackRepository, FeedbackEventRepository feedbackEventRepository, FeedbackMapper feedbackMapper) {
         this.feedbackRepository = feedbackRepository;
         this.feedbackEventRepository = feedbackEventRepository;
         this.feedbackMapper = feedbackMapper;
@@ -80,6 +77,4 @@ public class FeedbackServiceImpl implements FeedbackService {
         FeedbackDTOResponse feedbackDTOResponse = this.feedbackMapper.toDtos(feedback);
         return feedbackDTOResponse;
     }
-
-
 }

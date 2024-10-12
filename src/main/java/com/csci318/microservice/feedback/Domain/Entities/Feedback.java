@@ -1,6 +1,5 @@
 package com.csci318.microservice.feedback.Domain.Entities;
 
-import com.csci318.microservice.feedback.Domain.Events.FeedbackCreatedEvent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 
 import java.sql.Timestamp;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 @AllArgsConstructor
 @NoArgsConstructor
